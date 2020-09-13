@@ -5,6 +5,7 @@ import axios from 'axios';
 
 
 
+
 class App extends Component {
   constructor() {
     super()
@@ -16,6 +17,7 @@ class App extends Component {
     this.state = {
       movie: '',
       rating: 0,
+      list: []
     }
   }
 
@@ -31,15 +33,36 @@ class App extends Component {
     })
   }
 
+  async getRecommendations(obj) {
+    axios.post('http://127.0.0.1:5000/recommendations/', obj)
+      .then((res) => {
+        return res.data
+      })
+      .then((res) => {
+        this.setState({
+          list: res,
+        })
+      })
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.list !== prevState.list) {
+      console.log(this.state.list)
+      console.log("State has been updated!")
+    }
+  }
+
+
   onSubmit(e) {
     e.preventDefault();
     const obj = {
       movie_name: this.state.movie,
       user_rating: this.state.rating,
     }
-    axios.post('http://127.0.0.1:5000/recommendations/', obj)
-      .then(res => console.log(res.data))
+
+    this.getRecommendations(obj)
   }
+
 
   render() {
     return (
@@ -62,9 +85,10 @@ class App extends Component {
                 onChange={this.onChangeRating}
               />
             </div>
-            <button class="btn btn-primary" type="submit">Submit form</button>
+            <button className="btn btn-primary" type="submit">Submit form</button>
           </div>
         </form>
+        {/* <img src="http://image.tmdb.org/t/p/w185/rhIRbceoE9lR4veEXuwCC2wARtG.jpg"/> */}
       </div>
     );
   }
