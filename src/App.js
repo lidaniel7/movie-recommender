@@ -2,8 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from 'axios';
-
-
+import Posters from './Posters.js';
 
 
 class App extends Component {
@@ -17,7 +16,8 @@ class App extends Component {
     this.state = {
       movie: '',
       rating: 0,
-      list: []
+      list: [],
+      isSubmitted: false,
     }
   }
 
@@ -33,24 +33,14 @@ class App extends Component {
     })
   }
 
-  async getRecommendations(obj) {
-    axios.post('http://127.0.0.1:5000/recommendations/', obj)
-      .then((res) => {
-        return res.data
-      })
-      .then((res) => {
-        this.setState({
-          list: res,
-        })
-      })
-  }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.list !== prevState.list) {
-      console.log(this.state.list)
-      console.log("State has been updated!")
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (this.state.isSubmitted !== prevState.isSubmitted) {
+  //     this.setState({
+  //       isSubmitted: false
+  //     })
+  //   }
+  // }
 
 
   onSubmit(e) {
@@ -60,7 +50,16 @@ class App extends Component {
       user_rating: this.state.rating,
     }
 
-    this.getRecommendations(obj)
+    axios.post('http://localhost:5000/recommendations/', obj)
+      .then((res) => {
+        return res.data
+      })
+      .then((res) => {
+        this.setState({
+          list: res,
+          isSubmitted: true,
+        })
+      })
   }
 
 
@@ -88,7 +87,7 @@ class App extends Component {
             <button className="btn btn-primary" type="submit">Submit form</button>
           </div>
         </form>
-        {/* <img src="http://image.tmdb.org/t/p/w185/rhIRbceoE9lR4veEXuwCC2wARtG.jpg"/> */}
+        {this.state.isSubmitted && <Posters list={this.state.list}/>}
       </div>
     );
   }
