@@ -34,15 +34,6 @@ class App extends Component {
   }
 
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.isSubmitted !== prevState.isSubmitted) {
-  //     this.setState({
-  //       isSubmitted: false
-  //     })
-  //   }
-  // }
-
-
   onSubmit(e) {
     e.preventDefault();
     const obj = {

@@ -5,23 +5,11 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 
-# def load_ids():
-# 	idmap = pd.read_csv("movies_metadata.csv")
-# 	return idmap
-
-# idmap = load_ids()
-
-# @app.route('/recommendations/links/<str>', methods=['GET', 'POST'])
-# def getpaths():
-# 	request.json["movie_name"]
-
 @app.route('/movielinks/', methods=['GET', 'POST', "OPTIONS"])
 @cross_origin()
 def getLinks():
 	def load_recommendations():
 		item_similarity_df = pd.read_csv("movies_metadata.csv")
-		# item_similarity_df = pd.read_csv("similarities_genre.csv", index_col=0)
-		# item_similarity_df = pd.read_csv("similarities3.csv", index_col=0)
 		return item_similarity_df
 
 	output = []
@@ -33,9 +21,6 @@ def getLinks():
 			output.append(str(df2.loc[movie, "poster_path"]))
 		except KeyError:
 			continue
-	# for original_title in metadata_table.iteritems():
-	# 	output.append(original_title
-
 	return jsonify(output)
 
 
@@ -43,16 +28,8 @@ def getLinks():
 @cross_origin()
 def recommendations():
 
-	# if request.method == "OPTIONS":
-	# 	response = make_response()
-	# 	response.headers["Access-Control-Allow-Origin"] = "*"
-	# 	print("options called")
-	# 	return response
-
 	def load_recommendations():
-		# item_similarity_df = pd.read_csv("item_similarity_df.csv", index_col=0)
-		# item_similarity_df = pd.read_csv("similarities_genre.csv", index_col=0)
-		item_similarity_df = pd.read_csv("similarities3.csv", index_col=0)
+		item_similarity_df = pd.read_csv("similarities.csv", index_col=0)
 		return item_similarity_df
 
 	def get_similar_movie(movie_name, user_rating):
@@ -69,30 +46,8 @@ def recommendations():
 	for movie,rating in similar_movies.iteritems():
 		output.append(movie)
 	output = jsonify(output[1:10])
-	# output.headers["Access-Control-Allow-Origin"] = "*"
 
 	return output
-
-
-	# for movie_id, movie in request.json():
-	# 	similar_movies = similar_movies.append(get_similar_movie(movie["title"], movie["rating"]))
-
-	# output = []
-	# for similar_movie in get_similar_movie(movie.name):
-	# 	output.append(similar_movie)
-	# return jsonify(output)
-
-	# if (request.method == 'POST'):
-	# 	some_json = request.get_json()
-	# 	# return jsonify({'you sent': some_json})
-	# 	return "Hello"
-	# else:
-	# 	output = []
-	# 	for similar_movie in get_similar_movie(movie):
-	# 		output.append(similar_movie)
-	# 	# for movie in item_similarity_table:
-	# 	# 	output.append(movie)
-	# 	return jsonify(output)
 
 
 if __name__ == '__main__':
