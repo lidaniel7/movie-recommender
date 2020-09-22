@@ -25,7 +25,7 @@ class Posters extends Component {
                 })
             })
     }
-
+    //load poster images of top 10 recommended movies
     render() {
         return (
             movies.map((movie) =>

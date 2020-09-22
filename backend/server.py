@@ -5,6 +5,7 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 
+#get poster image links from movie database
 @app.route('/movielinks/', methods=['GET', 'POST', "OPTIONS"])
 @cross_origin()
 def getLinks():
@@ -23,7 +24,7 @@ def getLinks():
 			continue
 	return jsonify(output)
 
-
+#return top 10 movie recommendations given a film
 @app.route('/recommendations/', methods=['GET', 'POST', "OPTIONS"])
 @cross_origin()
 def recommendations():
